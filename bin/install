@@ -8,6 +8,11 @@ DOWNLOADER=$(which curl)
 
 # ref: https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-install-script
 $DOWNLOADER -sSL https://dot.net/v1/dotnet-install.sh > "$ASDF_INSTALL_PATH/dotnet-install.sh"
+if [ $? -ne 0 ]
+then
+    echo Download of $ASDF_INSTALL_VERSION version of the CLI failed. Exiting now.
+    exit 0
+fi
 
 chmod +x "$ASDF_INSTALL_PATH/dotnet-install.sh"
 
