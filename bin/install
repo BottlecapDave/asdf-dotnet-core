@@ -7,13 +7,18 @@ DOWNLOADER=$(which curl)
 # $DOWNLOADER -sSL https://dotnet.microsoft.com/download/dotnet-core/scripts/v1/dotnet-install.sh > "$ASDF_INSTALL_PATH/dotnet-install.sh"
 
 # ref: https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-install-script
-$DOWNLOADER -sSL https://dot.net/v1/dotnet-install.sh > "$ASDF_INSTALL_PATH/dotnet-install.sh"
+$DOWNLOADER -sSL https://dot.net/v1/dotnet-install.sh > "$ASDF_INSTALL_PATH/dotnet-install.temp.sh"
 if [ $? -ne 0 ]
 then
-    echo Download of $ASDF_INSTALL_VERSION version of the CLI failed. Exiting now.
-    exit 0
+    if [ ! -f "$ASDF_INSTALL_PATH/dotnet-install.sh" ]; then
+        echo Download of dotnet install script failed. Exiting now.
+        exit -1
+    fi
+else
+    echo Download of dotnet install script failed. Using cached version.
 fi
 
+cp -f "$ASDF_INSTALL_PATH/dotnet-install.temp.sh" "$ASDF_INSTALL_PATH/dotnet-install.sh"
 chmod +x "$ASDF_INSTALL_PATH/dotnet-install.sh"
 
 echo Installing the CLI requested version $ASDF_INSTALL_VERSION. Please wait, installation may take a few minutes.
@@ -25,6 +30,6 @@ rm "$ASDF_INSTALL_PATH/dotnet-install.sh"
 if [ $? -ne 0 ]
 then
     echo Download of $ASDF_INSTALL_VERSION version of the CLI failed. Exiting now.
-    exit 0
+    exit -1
 fi
 echo The CLI has been installed.
