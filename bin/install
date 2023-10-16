@@ -13,9 +13,9 @@ then
     if [ ! -f "$ASDF_INSTALL_PATH/dotnet-install.sh" ]; then
         echo Download of dotnet install script failed. Exiting now.
         exit -1
+    else
+        echo Download of dotnet install script failed. Using cached version.
     fi
-else
-    echo Download of dotnet install script failed. Using cached version.
 fi
 
 cp -f "$ASDF_INSTALL_PATH/dotnet-install.temp.sh" "$ASDF_INSTALL_PATH/dotnet-install.sh"
